@@ -6,6 +6,7 @@ class Search extends Component {
 
         return (
             <form>
+                Search
                 <input 
                     type='text'
                     value={searchTerm}
