@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
 import './App.css';
 
-function isSearched(searchTerm) {
-  return (item) => {
-    return item.title.toLowerCase().includes(searchTerm.toLowerCase())
-  }
-}
+// function isSearched(searchTerm) {
+//   return (item) => {
+//     return item.title.toLowerCase().includes(searchTerm.toLowerCase())
+//   }
+// }
 
 class App extends Component {
   constructor(props) {
@@ -18,6 +18,7 @@ class App extends Component {
 
     this.onDismiss = this.onDismiss.bind(this);
     this.onSearchChange = this.onSearchChange.bind(this);
+    this.isSearched = this.isSearched.bind(this)
   }
 
   onDismiss(id) {
@@ -30,13 +31,23 @@ class App extends Component {
     this.setState({searchTerm: event.target.value})
   }
 
+  isSearched(term) {
+    return (item) => item.title.toLowerCase().includes(term.toLowerCase())
+  }
+
   render() {
+    const {searchTerm, list} = this.state
+
     return (
       <div className="App">
         <form>
-          <input type='text' onChange={this.onSearchChange}/>
+          <input 
+            type='text'
+            value={searchTerm}
+            onChange={this.onSearchChange}
+          />
         </form>
-        {this.state.list.filter(isSearched(this.state.searchTerm)).map(item => {
+        {list.filter(this.isSearched(searchTerm)).map(item => {
           return (
             <div key={item.id}>
               <span>
