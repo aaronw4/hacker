@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
+import axios from 'axios';
 import Search from './components/Search';
 import Table from './components/Table';
+import {DEFAULT_QUERY, PATH_BASE, PATH_SEARCH, PARAM_SEARCH} from './constants/constants'
 import './App.css';
 
 // function isSearched(searchTerm) {
@@ -14,13 +16,14 @@ class App extends Component {
     super(props);
 
     this.state = {
-      list: list,
-      searchTerm: ''
+      result: null,
+      searchTerm: DEFAULT_QUERY
     };
 
     this.onDismiss = this.onDismiss.bind(this);
     this.onSearchChange = this.onSearchChange.bind(this);
     this.isSearched = this.isSearched.bind(this)
+    this.setSearchTopStories = this.setSearchTopStories.bind(this)
   }
 
   onDismiss(id) {
@@ -37,8 +40,18 @@ class App extends Component {
     return (item) => item.title.toLowerCase().includes(term.toLowerCase())
   }
 
+  setSearchTopStories(result) {
+    this.setState({result})
+  }
+
+  componentDidMount() {
+    axios.get(PATH_BASE + PATH_SEARCH + '?' + PARAM_SEARCH + this.state.searchTerm)
+      .then(result => this.setSearchTopStories(result.data))
+      .catch(err => err)
+  }
+
   render() {
-    const {searchTerm, list} = this.state
+    const {searchTerm, result} = this.state
 
     return (
       <div className="App">
@@ -46,34 +59,18 @@ class App extends Component {
           searchTerm={searchTerm}
           onSearchChange={this.onSearchChange}
         />
-        <Table
-          list={list}
-          searchTerm={searchTerm}
-          onDismiss={this.onDismiss}
-          isSearched={this.isSearched}
-        />
+        {!result ? 
+          <div>Loading...</div> :
+          <Table
+            list={result.hits}
+            searchTerm={searchTerm}
+            onDismiss={this.onDismiss}
+            isSearched={this.isSearched}
+          />
+        }
       </div>
     );
   }
 }
-
-const list = [
-  {
-    title: 'React',
-    url: 'https://reactjs.org',
-    author: 'Jordan Walke',
-    num_comments: 3,
-    points: 4,
-    id: 0
-  },
-  {
-    title: 'Redux',
-    url: 'https://redux.js.org',
-    author: 'Dan',
-    num_comments: 2,
-    points: 5,
-    id: 1
-  }
-]
 
 export default App;
