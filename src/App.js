@@ -1,4 +1,5 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
+import Search from './components/Search';
 import './App.css';
 
 // function isSearched(searchTerm) {
@@ -40,13 +41,10 @@ class App extends Component {
 
     return (
       <div className="App">
-        <form>
-          <input 
-            type='text'
-            value={searchTerm}
-            onChange={this.onSearchChange}
-          />
-        </form>
+        <Search
+          searchTerm={searchTerm}
+          onSearchChange={this.onSearchChange}
+        />
         {list.filter(this.isSearched(searchTerm)).map(item => {
           return (
             <div key={item.id}>
