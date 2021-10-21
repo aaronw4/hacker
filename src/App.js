@@ -27,9 +27,11 @@ class App extends Component {
   }
 
   onDismiss(id) {
-    const filterID = item => item.id !== id;
-    const updatedList = this.state.list.filter(filterID);
-    this.setState({list: updatedList})
+    const filterID = item => item.objectID !== id;
+    const updatedList = this.state.result.hits.filter(filterID);
+    this.setState({
+      result: {...this.state.result, hits: updatedList}
+    })
   }
 
   onSearchChange(event) {
