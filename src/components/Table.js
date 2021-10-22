@@ -2,10 +2,10 @@ import React from "react";
 import Button from "./Button";
 
 function Table(props) {
-    const {list, searchTerm, onDismiss, isSearched} = props;
+    const {list, onDismiss} = props;
     return (
         <div>      
-            {list.filter(isSearched(searchTerm)).map(item => {
+            {list.map(item => {
                 return (
                     <div key={item.objectID}>
                         <span>
